@@ -12,6 +12,8 @@
 #       - run: npm install -g bats
 #       - run: bats -v
 
+#token should be secrete
+
 name: github_repo_search_app
 on:
   push:
