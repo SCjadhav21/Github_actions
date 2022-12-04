@@ -12,7 +12,7 @@ const JavaScriptrepo = () => {
     let [data,setData]=React.useState([]);
     let [page,setPage] = useState(1);
     const [loading, setLoading]=useState(false);
-    let getData=()=>{
+    function getData(){
 
         axios.get(`https://api.github.com/search/repositories?q=stars:%3E1+language:javascript&per_page=10&page=${page}`)
        
@@ -25,10 +25,11 @@ const JavaScriptrepo = () => {
        
     }
       const handelChange=(value)=>{
-        setLoading(true)
+       
          setPage(page+value);
       }
-    useEffect(()=>{
+      useEffect(()=>{
+        setLoading(true)
         getData()
     },[page]);
 
