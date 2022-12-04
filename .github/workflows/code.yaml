@@ -1,0 +1,60 @@
+# name: learn-github-actions
+# run-name: ${{ github.actor }} is learning GitHub Actions
+# on: [push]
+# jobs:
+#   check-bats-version:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions/setup-node@v3
+#         with:
+#           node-version: '14'
+#       - run: npm install -g bats
+#       - run: bats -v
+
+name: github_repo_search_app
+on:
+  push:
+  pull_request:
+    - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Node 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: npm i    
+      - name: build project
+        run: npm run build
+      - name: Upload artifact in order to deploy
+        uses: actions/upload-artifact@v3
+        with:
+         name: production-files
+         path: ./build
+
+
+  deploy:   
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name:Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: production-files
+          path: ./build
+      - name: Deploy to a github page
+        uses: peaceiris/action-gh-pages@v3
+        with:
+          github_token: ${{secrets.GH_TOKEN}}
+          publish_dir: ./build
+    
