@@ -1,24 +1,9 @@
-# name: learn-github-actions
-# run-name: ${{ github.actor }} is learning GitHub Actions
-# on: [push]
-# jobs:
-#   check-bats-version:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#       - uses: actions/setup-node@v3
-#         with:
-#           node-version: '14'
-#       - run: npm install -g bats
-#       - run: bats -v
-
-#token should be secrete
-
-name: github_repo_search_app
+name: git_actions
 on:
   push:
   pull_request:
-    - main
+    branches:
+      - main
 
 jobs:
   build:
@@ -37,19 +22,19 @@ jobs:
       - name: build project
         run: npm run build
       - name: Upload artifact in order to deploy
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: production-files
           path: ./build
 
   deploy:
-    name: Deploy
+    name: deploy
     runs-on: ubuntu-latest
     needs: build
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: production-files
           path: ./build
